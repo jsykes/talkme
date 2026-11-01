@@ -1,0 +1,93 @@
+{
+  "_about": "g26b3 with even chunks (2026-10-27): chunking by sentence left 10% of the friend's ticks one word long (4% before), and in a 7-minute call g26b3 took a lone word for a sentence end and stalled after it (a lone I, then 10 s of silence; 14% of its replay utterances unfinished, g26 7%). Here a sentence's chunks are as even as they can be (7 words: 3/2/2). The tokens change, so the cache is new. Otherwise g26b3 (balanced sentence-end choices).",
+  "name": "g26b4",
+  "base": "gemma4a4b",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-partner-v1-gemma4a4b.gguf",
+  "label": "Partner v1",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 2,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "sentence_pauses": 0.3,
+    "even_chunks": true
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "speak": 0.5,
+    "speak_on": 3.0
+  },
+  "real_mid_reply_off": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "run12",
+      "g26",
+      "g26b2",
+      "g26b3"
+    ]
+  },
+  "mute_service_greetings": true
+}

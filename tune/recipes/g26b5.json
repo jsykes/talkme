@@ -1,0 +1,93 @@
+{
+  "_about": "g26b4 with the carry-on decision weighed (2026-10-28): the timing line stops mid-sentence into silences (g26b4 27 stalls on the recorded calls, g26 4) because the only place it learns to carry on mid-sentence is the built calls' continuing ticks at the words' weight 0.5 (the real calls train no carry-on at all, real_mid_reply_off), while the stops around it are trained at 1.0-1.9. Here the first token of each continuing tick, the decision to carry on, weighs 2.0 (carry_on_first; train_lora w1) and the rest of its words stay at 0.5. Same tokens as g26b4, so its cache serves.",
+  "name": "g26b5",
+  "base": "gemma4a4b",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-g26b5-partner-gemma4a4b.gguf",
+  "cache": "g26b4",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 2,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "sentence_pauses": 0.3,
+    "even_chunks": true
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "speak": 0.5,
+    "speak_on": 3.0
+  },
+  "carry_on_first": 2.0,
+  "real_mid_reply_off": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "g26",
+      "g26b3",
+      "g26b4"
+    ]
+  },
+  "mute_service_greetings": true
+}

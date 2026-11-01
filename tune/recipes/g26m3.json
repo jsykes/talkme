@@ -1,0 +1,99 @@
+{
+  "_about": "Persona and memories, third try (2026-10-24): a fresh run like g26m, whose 'I don't remember that' held on claims it never trained on (memory test v2: declined 8 of 16, g26 2), without what made it quiet and late. Changes from g26m: the persona calls are the fixed writer's (every false claim its own scenario, ordinary people, every call answers a question): g26m2's 170 plus 110 new, each used once (g26m: 280 Vegas-heavy ones twice); the false-memory reply weighs more (first words 8, rest 3); 700 steps so the timing data is seen about as often as in g26 (g26m: 600 steps over a third more calls).",
+  "name": "g26m3",
+  "base": "gemma4a4b",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-g26m3-partner-gemma4a4b.gguf",
+  "dialogues": [
+    {"kind": "memory", "focus": "recall", "count": 40, "seed": 6301, "start_id": 360000, "goodbye": 0.3},
+    {"kind": "memory", "focus": "false_memory", "count": 50, "seed": 6302, "start_id": 370000, "goodbye": 0.3},
+    {"kind": "memory", "focus": "blank", "count": 20, "seed": 6303, "start_id": 380000, "goodbye": 0.3}
+  ],
+  "dialogue_files": [
+    {
+      "file": "out/dial_g26m2.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 1,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "greetings": "partner"
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "false_memory_start": 8.0,
+    "false_memory": 3.0
+  },
+  "real_mid_reply_off": true,
+  "mute_service_greetings": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 700,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "memory": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "run12",
+      "g26",
+      "g26m"
+    ]
+  }
+}

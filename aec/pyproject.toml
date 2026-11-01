@@ -1,0 +1,9 @@
+[project]
+name = "talkme-aec"
+version = "0.1.0"
+description = "Echo canceller helper for talkme: WebRTC AEC3 (pywebrtc-audio) on the mic, against what the speaker played"
+requires-python = ">=3.11,<3.13"
+dependencies = ["pywebrtc-audio", "numpy"]
+
+[tool.uv]
+package = false

@@ -1,0 +1,3 @@
+{
+  "notes": "v1 and the app's default (recipe g26b4), chosen from two long live calls, 13 and 12 minutes, on 2026-10-28. Runs at 0.6 with the carry-on bar at 0.9.\nLive 86%: stops when cut in on 8/9, replies in 0.89 s. Held-out: start 83%, barge 89%, talks over 9%.\nWeak spots: declines 6/12 (the base is decensored and training had no decline examples), maths 2/6."
+}

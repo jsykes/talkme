@@ -1,0 +1,20 @@
+{
+  "notes": "gptoss15: 8 layers, attention only, 1,800 steps (gptoss12's 1,200 plus 600 more), 21 MB.\nWide quiz: 30 right, 6 wrong, 0 silent of 36: the best adapter so far and the first with no silences. Plain gpt-oss gets 32. Training loss 0.72 over the last 100 steps, against gptoss12's 0.82.\nWeak spots: picked up a habit of confirming itself (\"That's correct.\") on 8 of 36 replies, and can correct itself mid-reply (\"Three. A standard bicycle has two wheels.\"). No full tests.\nPicked by ear over gptoss13, the same with experts (2026-11-01). gpt-oss is proven with this adapter.",
+  "recipe": "gptoss15",
+  "suggestedLabel": "Partner v1 (gpt-oss)",
+  "results": {
+    "quiz": {
+      "run": "gptoss15",
+      "score": 9,
+      "of": 12,
+      "silent": 1,
+      "date": 1793495312613,
+      "listen": 0.6
+    }
+  },
+  "trained": "2026-10-31T21:08:00",
+  "formerNames": [
+    "talkme-partner-8layer-long-gptoss.gguf"
+  ],
+  "label": "Partner v1 (gpt-oss)"
+}

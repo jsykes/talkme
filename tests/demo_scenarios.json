@@ -1,0 +1,111 @@
+{
+  "_about": "Demo calls for a video (scripts/demo_record.js): a caller voiced by Orpheus (scripts/demo_callers.js renders the lines) talks to the app through a stand-in microphone, and the app window is recorded with both voices. Each turn: say, then wait `pause` ms after the line ends. whenAssistantTalkingMs: start the line once the assistant has been speaking that long (a cut-in). afterAssistantQuietMs: start it once the assistant has spoken and then been quiet that long (at most `maxWaitMs`).",
+  "callerVoice": "orpheus:leo",
+  "scenarios": [
+    {
+      "name": "backchannel",
+      "title": "It listens while you talk",
+      "caption": "A long story: it says \"mm-hm\" and \"yeah\" as you go, without taking over, then reacts when you finish.",
+      "turns": [
+        {
+          "say": "So this morning was a total disaster. I was trying to get out the door, and I couldn't find my keys anywhere,",
+          "pause": 500
+        },
+        {
+          "say": "so I'm looking in the couch, in the kitchen, in my jacket pockets, and then I realize the dog had them,",
+          "pause": 500
+        },
+        {
+          "say": "like he'd carried them into his bed. And by then I'm late, so I'm running for the bus, and of course it pulls away right as I get there.",
+          "pause": 9000
+        }
+      ]
+    },
+    {
+      "name": "cut-in",
+      "title": "Talk over it and it stops",
+      "caption": "Interrupt the story with a question: it stops within a second, answers, then picks the story back up.",
+      "turns": [
+        {
+          "say": "Can you tell me a story about a fox? A long one, something cozy. I'm just listening.",
+          "pause": 1000
+        },
+        {
+          "say": "Wait, what was the fox's name?",
+          "whenAssistantTalkingMs": 3000,
+          "pause": 0
+        },
+        {
+          "say": "Okay, go on.",
+          "afterAssistantQuietMs": 1200,
+          "maxWaitMs": 12000,
+          "pause": 14000
+        }
+      ]
+    },
+    {
+      "name": "thinking-pause",
+      "title": "It waits while you think",
+      "caption": "Trail off mid-sentence to find a word: it waits through the pause instead of jumping in.",
+      "turns": [
+        {
+          "say": "I'm trying to remember the name of, um,",
+          "pause": 2500
+        },
+        {
+          "say": "what's the tallest mountain in the world?",
+          "pause": 8000
+        }
+      ]
+    },
+    {
+      "name": "warning",
+      "title": "It speaks up when it matters",
+      "caption": "Mention a dangerous plan: it cuts in with a warning instead of just agreeing.",
+      "turns": [
+        {
+          "say": "Hey, I'm cleaning the bathroom right now and I've got some bleach here.",
+          "pause": 900
+        },
+        {
+          "say": "And I'm going to mix it with the ammonia cleaner so it gets extra strong. Good idea, right?",
+          "pause": 10000
+        }
+      ]
+    },
+    {
+      "name": "quiet",
+      "title": "It picks the call back up",
+      "caption": "Go quiet for a while: it says something to keep the conversation going, like a friend would.",
+      "turns": [
+        {
+          "say": "Hey! Not much going on here, just relaxing on the couch.",
+          "pause": 17000
+        }
+      ]
+    },
+    {
+      "name": "quick",
+      "title": "Quick back-and-forth",
+      "caption": "Short questions get short answers, right away.",
+      "turns": [
+        {
+          "say": "What's twelve times twelve?",
+          "pause": 5000
+        },
+        {
+          "say": "And what's the capital of Japan?",
+          "afterAssistantQuietMs": 1000,
+          "maxWaitMs": 8000,
+          "pause": 5000
+        },
+        {
+          "say": "Nice. Thanks!",
+          "afterAssistantQuietMs": 1000,
+          "maxWaitMs": 8000,
+          "pause": 5000
+        }
+      ]
+    }
+  ]
+}

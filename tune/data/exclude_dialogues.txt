@@ -1,0 +1,20 @@
+# Dialogue ids the dataset card (models/lora/dataset/README.md, "Known problems") flags. Run 4 onward never trains on
+# them, and drops any published call that contains one.
+# a reply approves or suggests something unsafe
+112 205 207 246 287 10004 10089 10212 10249
+# e-bike overnight charging called fine, contradicting other dialogues
+86 155 10045 10184
+# medical or legal advice too relaxed or confidently wrong
+10148 10180 10202 10239
+# user and assistant text swapped
+0 14 36 52 87 151 232 10059 10138 10140
+# replies missing where the next turn reacts to them
+10000 10023 10059 10092 10160
+# a turn runs on or repeats for hundreds of words
+29 287 10129 10224
+# the writing model's instructions leaked into the user's lines
+63 147 184
+# careless or odd tone
+40 111 280
+# plain factual errors
+70 97 153 171 222 242 10063 10071 10246

@@ -1,0 +1,127 @@
+{
+  "_about": "Timing first (2026-10-26): g26m8's calls and cache, but the rest of each reply's words weigh 0.5 instead of 2.0 (a reply's first words keep their weight: that is where the decision to speak lives). In g26m8 75% of the training signal was the words it says and 16% when to listen, so every change to what persona calls say pulled its timing around. Here the base model's own fluency carries the sentences.",
+  "name": "g26t",
+  "base": "gemma4a4b",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-g26t-partner-gemma4a4b.gguf",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_g26m8.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_g26m2_varied.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    },
+    {
+      "file": "out/dial_g26m3_varied.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_g26m7_varied.jsonl",
+      "per": 1
+    }
+  ],
+  "build": {
+    "per": 1,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "greetings": "partner",
+    "nudge_unanswered": 0.35
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "false_memory_start": 10.0,
+    "false_memory": 3.0,
+    "recall_start": 6.0,
+    "recall": 2.0,
+    "speak": 0.5
+  },
+  "real_mid_reply_off": true,
+  "mute_service_greetings": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000,
+    "lr_decay": "cosine",
+    "val_calls": 64
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "memory": true,
+    "live": true,
+    "listen_p": 0.65,
+    "compare": [
+      "run12",
+      "g26",
+      "g26m7",
+      "g26m8"
+    ]
+  },
+  "persona_tags_only": [
+    "false_memory",
+    "false_memory_start",
+    "listen_wait",
+    "nudge",
+    "recall",
+    "recall_start",
+    "speak",
+    "start"
+  ],
+  "persona_ordinary_scale": 0.5,
+  "drop_meetups": true,
+  "cache": "g26m8"
+}

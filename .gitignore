@@ -1,0 +1,45 @@
+# dependencies and toolchains (re-installable)
+node_modules/
+vendor/
+tune/.venv/
+aec/.venv/
+
+# models: base GGUF, HF checkpoint, speech models, published adapter are downloaded (see README);
+# only our own adapters are kept, through Git LFS
+models/*
+!models/lora/
+!models/bases.json
+models/lora/*
+!models/lora/talkme-*.gguf
+# each adapter's notes and name, beside it (src/main/config.js readCard); the published adapter's too
+!models/lora/talkme-*.json
+!models/lora/microturn-duplex-lora.json
+
+# training outputs: caches and adapter dirs are huge; keep the evaluation results and comparison tables
+tune/out/*
+!tune/out/*.md
+!tune/out/eval*.json
+tune/out/eval_check.json
+
+# test output, and audio of any kind
+tests/out/
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+
+*.log
+
+# downloaded data: Open Yap 1K sample, otoSpeech full-duplex processed 141h (both CC BY 4.0)
+/data/
+# nothing built from otoSpeech goes in the repository
+tune/data/*oto*
+tune/data/long_calls.jsonl
+
+# Python, and local settings
+__pycache__/
+.venv/
+.env*
+.claude/
+CLAUDE.md

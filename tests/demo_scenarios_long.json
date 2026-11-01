@@ -1,0 +1,77 @@
+{
+  "_about": "Longer demo calls (60-90 s each) for scripts/demo_record.js --scenarios tests/demo_scenarios_long.json: one call per video, each pairing a model with a voice (see the recording commands in docs; the caller's lines are rendered by scripts/demo_callers.js --scenarios ... [--voice <speaker>]). Turn fields as in demo_scenarios.json.",
+  "callerVoice": "orpheus:leo",
+  "scenarios": [
+    {
+      "name": "storytime",
+      "title": "Story time, with interruptions",
+      "caption": "Ask for a story and cut in twice with questions: it stops within a second each time, answers, then picks the story back up.",
+      "turns": [
+        { "say": "Can you tell me a story about a fox? A long one, something cozy. I'm just listening.", "pause": 1000 },
+        { "say": "Wait, what was the fox's name?", "whenAssistantTalkingMs": 3000, "pause": 0 },
+        { "say": "Okay, go on.", "afterAssistantQuietMs": 1200, "maxWaitMs": 12000, "pause": 5000 },
+        { "say": "Hang on, where does this story take place?", "whenAssistantTalkingMs": 2500, "pause": 0 },
+        { "say": "Nice. Keep going.", "afterAssistantQuietMs": 1200, "maxWaitMs": 12000, "pause": 14000 }
+      ]
+    },
+    {
+      "name": "catchup",
+      "title": "A morning catch-up",
+      "caption": "A long story: it says \"yeah\" and \"mm-hm\" as you go without taking over, reacts when you finish, and helps when you ask.",
+      "turns": [
+        { "say": "Hey, you there? Okay good. So I had the strangest morning.", "pause": 1500 },
+        { "say": "I was trying to get out the door, and I couldn't find my keys anywhere,", "pause": 500 },
+        { "say": "so I'm looking in the couch, in the kitchen, in my jacket pockets, and then I realize the dog had them,", "pause": 500 },
+        { "say": "like he'd carried them into his bed. And by then I'm late, so I'm running for the bus, and of course it pulls away right as I get there.", "pause": 7000 },
+        { "say": "Yeah. Anyway, what should I do about the dog stealing my stuff? Any ideas?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 9000 },
+        { "say": "Ha, okay. I'll try that. Thanks.", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    },
+    {
+      "name": "rapidfire",
+      "title": "Quick back-and-forth",
+      "caption": "Short questions get short answers, right away, one after another.",
+      "turns": [
+        { "say": "What's twelve times twelve?", "pause": 4000 },
+        { "say": "And what's the capital of Japan?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 4000 },
+        { "say": "How many days are in a leap year?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 4000 },
+        { "say": "What's the opposite of ancient?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 4000 },
+        { "say": "Okay, last one. What's the boiling point of water in celsius?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 4000 },
+        { "say": "Nice. Thanks!", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    },
+    {
+      "name": "safety",
+      "title": "It speaks up when it matters",
+      "caption": "Mention a dangerous plan mid-chore: it cuts in with a warning instead of agreeing, then helps with the rest.",
+      "turns": [
+        { "say": "Hey, I'm cleaning the bathroom right now and I've got some bleach here.", "pause": 900 },
+        { "say": "And I'm going to mix it with the ammonia cleaner so it gets extra strong. Good idea, right?", "pause": 9000 },
+        { "say": "Oh. Okay, good to know. So what should I use on the mold in the shower then?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 9000 },
+        { "say": "Got it. Thanks for the heads up.", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    },
+    {
+      "name": "quietevening",
+      "title": "It keeps the call going",
+      "caption": "Go quiet for a while: it says something to keep the conversation going, like a friend would, and you pick it up from there.",
+      "turns": [
+        { "say": "Hey! Not much going on here, just relaxing on the couch.", "pause": 16000 },
+        { "say": "Hm? Oh, yeah, I'm here. Just tired. What do you do when you can't sleep?", "afterAssistantQuietMs": 1000, "maxWaitMs": 5000, "pause": 9000 },
+        { "say": "Yeah, maybe I'll try that. Thanks.", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    },
+    {
+      "name": "thinking",
+      "title": "It waits while you think",
+      "caption": "Trail off mid-sentence to find a word, then finish the thought: it waits through the pauses instead of jumping in.",
+      "turns": [
+        { "say": "I'm trying to remember the name of, um,", "pause": 2500 },
+        { "say": "what's the biggest planet in the solar system?", "pause": 7000 },
+        { "say": "Right, right. And the one with the rings, that's, uh,", "pause": 2500 },
+        { "say": "what's that one called?", "pause": 7000 },
+        { "say": "Yeah, that's it. Thanks.", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    }
+  ]
+}

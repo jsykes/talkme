@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'" />
+  <title>talkme</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>talkme <span class="sub">full-duplex micro-turn voice chat</span></h1>
+    <nav>
+      <button data-tab="call" class="active">Call</button>
+      <button data-tab="tune">Tune</button>
+      <button data-tab="adapters">Adapters</button>
+      <button data-tab="settings">Settings</button>
+    </nav>
+    <div id="status">
+      <span class="pill" data-svc="llama">llama</span>
+      <span class="pill" data-svc="stt">stt</span>
+      <span class="pill" data-svc="tts">tts</span>
+      <span class="pill" data-svc="aec" title="echo canceller: removes the assistant's own voice from the mic, so it can be used on speakers">aec</span>
+      <span class="pill" data-svc="call">call</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="tab-call" class="tab active">
+      <div class="toolbar">
+        <button id="btn-services">Load models</button>
+        <button id="btn-call" class="primary" disabled>Start call</button>
+        <label>voice <select id="voice" title="Orpheus and Chatterbox run on the GPU and sound the most natural; Kokoro and Piper run on the CPU"></select></label>
+        <button id="voice-new" title="make a new Chatterbox voice from a clip or a recording">+ voice</button>
+        <label>model <select id="model" title="the base model; switching restarts the model server (30-60 s) with the adapter last used on it"></select></label>
+        <label>adapter <select id="adapter" title="which LoRA shapes the timing (only those trained on this model); swap any time, even mid-call"></select></label>
+        <label>listen threshold <input id="thr" type="range" min="0.05" max="0.9" step="0.05" /> <span id="thr-v"></span></label>
+        <label title="how sure it must be to stop in the middle of its own sentence when you are quiet (the threshold applies everywhere else); higher = finishes its sentences, lower = stops sooner. Remembered per adapter">carry-on bar <input id="bar" type="range" min="0.5" max="0.99" step="0.01" /> <span id="bar-v"></span></label>
+        <label title="decide like a person: talk with the model's own probability instead of waiting until it is sure (for adapters trained on real conversations)"><input id="sample" type="checkbox" /> human timing</label>
+        <label><input id="mic-on" type="checkbox" checked /> mic <select id="mic-device" title="which input device the call listens to"></select></label>
+        <label title="lower the assistant's voice the moment you start talking"><input id="duck" type="checkbox" checked /> duck</label>
+        <button id="echo-test" title="plays a sentence on the speaker with the mic open and counts how much of it the recogniser heard: 0 words is what you want">echo test</button>
+        <span id="echo-result" class="note"></span>
+        <label>output <select id="spk-device" title="where the assistant's voice plays"></select></label>
+        <span id="mic-level"></span>
+      </div>
+      <div id="voice-panel" class="voice-panel" hidden>
+        <strong>New Chatterbox voice</strong>
+        <span class="note">5-15 seconds of one person speaking clearly, no music. Only clone a voice you have the right to use: your own, a synthetic one, or someone who has agreed.</span>
+        <div class="row">
+          <label>name <input id="voice-name" placeholder="e.g. my-voice" maxlength="40" /></label>
+          <button id="voice-upload">Upload a clip...</button>
+          <button id="voice-record">Record 10 s</button>
+          <button id="voice-remove" class="danger" title="delete the selected Chatterbox voice you made">Remove selected</button>
+          <span id="voice-msg" class="note"></span>
+        </div>
+      </div>
+      <div class="split">
+        <div class="col">
+          <h2>Transcript</h2>
+          <div id="transcript"></div>
+          <div class="inject">
+            <input id="inject" placeholder="type what the mic heard (no microphone needed), Enter sends one tick" />
+          </div>
+        </div>
+        <div class="col">
+          <h2>Tick tape <span id="tick-stats"></span></h2>
+          <table id="tape">
+            <thead><tr><th>#</th><th>heard</th><th>said</th><th>P(listen)</th><th>llm</th><th>tick</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <h2>Log</h2>
+      <pre id="log"></pre>
+    </section>
+
+    <section id="tab-tune" class="tab">
+      <p class="hint">Train your own adapter: pick a run to start from, make a new run from it, change the model or what it learns, then <strong>Run everything</strong>. A run is a recipe (<code>tune/recipes/*.json</code>); each stage runs <code>tune/pipeline.py</code> and skips what is already done, so a paused run resumes where it was. Training takes the GPU (on the 4090: about an hour to cache the calls through the model, an hour or so of training, two hours of tests) and the stages start their own model server, so the app's is stopped first; <strong>Load models</strong> brings it back.</p>
+      <div class="recipe-bar">
+        <label>run <select id="recipe"></select></label>
+        <input id="recipe-saveas" placeholder="new run's name" />
+        <button id="recipe-new" title="a copy of this run under a new name, with the changes below">New run from this</button>
+        <button id="recipe-save" title="save the changes into this run">Save changes</button>
+        <button id="recipe-reload" title="back to what is saved">Revert</button>
+        <span id="recipe-msg" class="note"></span>
+      </div>
+      <p id="recipe-trained" class="banner" hidden>This run is trained already: changing the model or what it learns does nothing here (only its tests would run again). Make a new run from it to train with your changes.</p>
+      <div id="recipe-form" class="recipe-form"></div>
+      <details class="recipe-json"><summary>Everything in the recipe (JSON): the data it trains on, how calls are built, and the rest</summary>
+        <textarea id="recipe-text" spellcheck="false"></textarea>
+      </details>
+      <details id="add-base" class="recipe-json"><summary>Add a base model: another model to call on and train on, from Hugging Face</summary>
+        <p class="hint">Two repos on huggingface.co: the quantized GGUF the app runs, and the full-precision checkpoint the trainer learns on (the same model). It has to be a family the trainer knows (Gemma 4, Ministral 3, Qwen3.6, gpt-oss); a new family needs code (README, Training your own adapter). <strong>Check</strong> looks it up without changing anything; <strong>Add</strong> puts it in <code>models/bases.json</code>; <strong>Download</strong> fetches both, with what training needs, and resumes if stopped.</p>
+        <div class="base-form">
+          <label>name <input id="base-name" placeholder="gemma4e4b" title="lower-case letters and digits; adapters trained on it end with this name" /></label>
+          <label>name in the app <input id="base-label" placeholder="Gemma 4 E4B" /></label>
+          <label>GGUF repo <input id="base-gguf-repo" placeholder="mradermacher/gemma-4-26B-A4B-it-GGUF" /></label>
+          <button id="base-lookup" title="list the repo's GGUF files">Look up</button>
+          <label>file <select id="base-gguf-file"><option value="">(look up the repo first)</option></select></label>
+          <label>checkpoint repo <input id="base-train-repo" placeholder="google/gemma-4-26B-A4B-it" /></label>
+        </div>
+        <div class="recipe-bar">
+          <button id="base-check">Check</button>
+          <button id="base-add" disabled>Add</button>
+          <label>download <select id="base-dl"></select></label>
+          <button id="base-download" title="the base's GGUF and training checkpoint, llama.cpp's source and the trainer's packages (npm run setup -- --base NAME --train NAME)">Download</button>
+        </div>
+        <pre id="base-msg" class="note"></pre>
+      </details>
+      <div class="stages">
+        <button data-stage="dialogues">1. Write dialogues</button>
+        <button data-stage="data">2. Build data</button>
+        <button data-stage="train">3. Train and export</button>
+        <button data-stage="replays">4. Quiz and replays</button>
+        <button data-stage="live">5. Live tests</button>
+        <button data-stage="all" class="primary">Run everything</button>
+        <button id="tune-stop" class="danger" title="stops the stage and its model server or trainer; running the same stage again resumes it (training from its last saved step)">Pause</button>
+        <button id="tune-use" disabled>Use this run's adapter</button>
+        <span id="tune-state" class="note"></span>
+      </div>
+      <div class="two">
+        <div><h3>Progress</h3><pre id="tune-log"></pre></div>
+        <div><h3>Results</h3><pre id="tune-results"></pre></div>
+      </div>
+    </section>
+
+    <section id="tab-adapters" class="tab">
+      <div class="ad-side">
+        <input id="ad-filter" placeholder="filter by name, base or run" />
+        <div id="ad-list"></div>
+      </div>
+      <div id="ad-detail"></div>
+    </section>
+
+    <section id="tab-settings" class="tab">
+      <p class="hint">Saved settings apply the next time you click Load models (Stop services first). The adapter, voice and listen threshold in the Call tab switch at once. The model and adapter are picked in the Call tab; an adapter always runs on the model it was trained on (written in the adapter file at export; for older files the end of its name: -gemma4a4b, -hauhau, ...).</p>
+      <form id="settings-form">
+        <fieldset><legend>Micro-turn</legend>
+          <label title="every adapter is trained at 600 ms; another value makes them all misjudge timing">tick ms (keep 600) <input name="tickMs" type="number" /></label>
+          <label>listen threshold <input name="listenThreshold" type="number" step="0.05" /></label>
+          <label>TTS flush words <input name="ttsFlushWords" type="number" /></label>
+          <label>TTS speed <input name="ttsSpeed" type="number" step="0.05" /></label>
+        </fieldset>
+        <fieldset><legend>llama-server</legend>
+          <label>executable <input name="llama.exe" /><button type="button" data-pick="llama.exe">…</button></label>
+          <label>base model GGUF <input name="llama.model" /><button type="button" data-pick="llama.model">…</button></label>
+          <label title="the adapter dropdown in the Call tab switches at once; this field is the one loaded at start">LoRA adapter GGUF (at start) <input name="llama.lora" /><button type="button" data-pick="llama.lora">…</button></label>
+          <label>port <input name="llama.port" type="number" /></label>
+          <label>context <input name="llama.ctx" type="number" /></label>
+          <label>n-cpu-moe (experts kept in RAM; raise when sharing the GPU) <input name="llama.nCpuMoe" type="number" /></label>
+        </fieldset>
+        <fieldset><legend>Persona</legend>
+          <p class="hint">Only adapters trained with a persona use this; the ones in the repository ignore it. Leave it empty for the plain partner. Applies on Save, from the next tick.</p>
+          <label title="who the friend is, like: Maya, 29, a night-shift nurse who loves horror movies and bad puns; dry and teasing">who the friend is <textarea name="persona.text" rows="2" placeholder="Maya, 29, a night-shift nurse who loves horror movies and bad puns; dry and teasing."></textarea></label>
+          <label title="one per line: things you told it on earlier calls (your name, people, plans, likes). It should bring up a shared past only from this list.">what it remembers about you <textarea name="persona.memories" rows="5" placeholder="Their name is Alex.&#10;Alex's dog Biscuit hurt his paw last week.&#10;Alex is training for a 10k in March."></textarea></label>
+        </fieldset>
+        <fieldset><legend>Storage</legend>
+          <p class="hint">Training checkpoints (40-60 GB a base), new bases' GGUFs and each run's training cache (around 50 GB) go here when they are made, linked into the project so everything finds them; what is already on disk stays where it is. Empty: inside the project. Applies on Save, to the next download or training.</p>
+          <label title="a full path, e.g. E:\talkme; it keeps the project's layout (models\hf\..., tune\out\cache_...)">folder for large files <input name="storage" placeholder="E:\talkme" /><button type="button" data-pick="storage" data-dir="1">…</button></label>
+        </fieldset>
+        <fieldset><legend>Debugging</legend>
+          <label title="each call's audio as three WAV files in the app's data folder (calls/): what the mic heard, what the speaker played, and the mic after the echo canceller. Only the last 5 calls are kept.">save call audio (to look into glitches) <input name="saveCallAudio" type="checkbox" /></label>
+        </fieldset>
+        <fieldset><legend>Speech</legend>
+          <label>STT model dir <input name="stt.dir" /></label>
+          <label title="the voice dropdown in the Call tab switches at once; this field is the one used at start">voice id (at start) <input name="tts.voice" /></label>
+        </fieldset>
+        <button type="submit" class="primary">Save</button>
+        <span class="note">model changes apply after Stop services / Load models</span>
+      </form>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

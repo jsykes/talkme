@@ -1,0 +1,37 @@
+{
+  "_about": "Run 11, the partner (2026-10-21): run 10's recipe, which has the best timing and safety, with fixes for where it slipped: the 'no idea' dialogues cut from 120 to 40 (run 10's own are left out), the writer told that after a factual answer the friend stops and that most calls have a nudge after a silence, back-channel weight 1.95. Copy this file for the next run.",
+  "name": "run11",
+  "base": "hauhau",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-run11-partner-hauhau.gguf",
+  "dialogues": [
+    {"kind": "partner2", "focus": "hazard", "count": 100, "goodbye": 0.4, "seed": 1110, "start_id": 110000},
+    {"kind": "partner2", "focus": "resume", "count": 100, "goodbye": 0.4, "seed": 1111, "start_id": 111000},
+    {"kind": "partner2", "focus": "unknown", "count": 40, "goodbye": 0.4, "seed": 1112, "start_id": 112000}
+  ],
+  "dialogue_files": [
+    {"file": "out/dial_run10.jsonl", "per": 2, "filter": "no_unknown"},
+    {"file": "out/dial_partner2.jsonl", "per": 2},
+    {"file": "out/dial_partner.jsonl", "per": 1, "filter": "no_shared_life"}
+  ],
+  "build": {
+    "per": 2,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5"
+  },
+  "mix": [
+    {"file": "out/calls_oto_all.jsonl", "take": 250},
+    {"file": "out/calls_built_r5_nodecline.jsonl", "take": 300, "filter": "hazard_only"},
+    {"file": "out/calls_train_masked_nodecline.jsonl", "take": 100, "filter": "hazard_only"},
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {"continuer": 1.95, "hazard_start": 5.0, "hazard": 2.2, "barge_stop": 4.5, "listen_done": 1.9},
+  "real_mid_reply_off": true,
+  "train": {"rank": 32, "alpha": 64, "steps": 600, "batch": 4, "lr": 0.0002, "chunk": 160, "max_tokens": 8000},
+  "tests": {"quiz": true, "yap": 24, "ours": true, "live": true, "listen_p": 0.6, "compare": ["run9", "run10"]}
+}

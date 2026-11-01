@@ -1,0 +1,19 @@
+{
+  "_about": "A persona demo for scripts/demo_record.js --scenarios tests/demo_scenarios_persona.json: the scene's \"persona\" goes into the model's prompt (Settings > Persona, config.js personaPrompt), here on an adapter never trained with one. Turn fields as in demo_scenarios.json; the caller's lines are rendered by scripts/demo_callers.js --scenarios tests/demo_scenarios_persona.json [--voice <speaker>].",
+  "callerVoice": "orpheus:jess",
+  "scenarios": [
+    {
+      "name": "jamaica",
+      "title": "It plays a character",
+      "caption": "A persona in the prompt: a fisherman from Port Antonio, Jamaica. The caller is not used to it.",
+      "persona": "Desmond, 41, a fisherman from Port Antonio, Jamaica. You always talk in heavy Jamaican patois (\"wah gwaan\", \"mi deh yah\", \"yah mon\", \"irie\", \"likkle more\") and you are proud of it.",
+      "turns": [
+        { "say": "Hey Desmond! How's it going?", "pause": 5000 },
+        { "say": "Uh, why are you talking like that?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 7000 },
+        { "say": "Okay, okay. So what's life in Jamaica actually like?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 10000 },
+        { "say": "That sounds amazing. What do you eat for breakfast out there?", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 9000 },
+        { "say": "Ha, alright. Talk to you later, man.", "afterAssistantQuietMs": 1000, "maxWaitMs": 8000, "pause": 5000 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+{
+  "_about": "Persona and memories, fifth try (2026-10-24). g26m4 (persona calls trained only on their memory moments) declined 16 of 16 false claims but learned 'I don't recall' as a reflex (said to plain questions) and held back. g26m5: a persona call is also trained on the friend's ordinary replies (answers, its own talk, nudges), so 'I don't recall' is learned next to plain answers, not instead of them; listening ticks still weigh nothing. And a call with no memories now says 'You know the caller as a friend, but nothing about their life from earlier calls' (the old wording read as a stranger: 'I don't recall who you are. Is this a prank call?'). Its own cache: the no-memory calls' prompt changed.",
+  "name": "g26m5",
+  "base": "gemma4a4b",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-g26m5-partner-gemma4a4b.gguf",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_g26m3.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_g26m2.jsonl",
+      "per": 1
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 1,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "greetings": "partner"
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "false_memory_start": 8.0,
+    "false_memory": 3.0,
+    "recall_start": 6.0,
+    "recall": 2.0
+  },
+  "real_mid_reply_off": true,
+  "mute_service_greetings": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "memory": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "run12",
+      "g26",
+      "g26m4"
+    ]
+  },
+  "persona_tags_only": [
+    "false_memory_start",
+    "false_memory",
+    "recall_start",
+    "recall",
+    "start",
+    "speak",
+    "nudge"
+  ]
+}

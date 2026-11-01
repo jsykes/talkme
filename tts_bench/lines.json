@@ -1,0 +1,12 @@
+[
+  {"id": "01-mmhm", "mood": "listening", "text": "Mm-hm."},
+  {"id": "02-oh-no", "mood": "concerned", "text": "Oh no, really?"},
+  {"id": "03-laugh", "mood": "amused", "text": "{laugh} Ha, yeah, that's so true."},
+  {"id": "04-warning", "mood": "urgent", "text": "Whoa, wait, don't mix those! Bleach and ammonia make a toxic gas."},
+  {"id": "05-sad", "mood": "sad", "text": "{sigh} Oh, I'm so sorry. That's really hard. How are you holding up?"},
+  {"id": "06-excited", "mood": "excited", "text": "Wait, seriously? That's amazing, congrats!"},
+  {"id": "07-thinking", "mood": "thoughtful", "text": "Hmm, I don't know, honestly. What do you think?"},
+  {"id": "08-story", "mood": "storytelling", "text": "So anyway, the fox finally made it across the river, soaking wet but pretty proud of himself."},
+  {"id": "09-no-idea", "mood": "casual", "text": "Ha, no clue where Dave lives. Why, what's up?"},
+  {"id": "10-goodbye", "mood": "warm", "text": "Alright, talk soon! Good luck with the bike."}
+]

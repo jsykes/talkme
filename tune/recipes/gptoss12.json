@@ -1,0 +1,96 @@
+{
+  "_about": "gptoss2 (last 8 layers, attention only) trained on for 600 more steps (init_from, 1200 in all; another seed so the calls come in another order). gptoss11 is the same with experts: are the experts worth keeping? Full tests: the simplest gpt-oss adapter that answers (25/36), so its timing decides.",
+  "name": "gptoss12",
+  "base": "gptoss",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-partner-light-gptoss.gguf",
+  "label": "Partner light (gpt-oss)",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 2,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3,
+    "filler_gap": 5,
+    "nudge_quiet": "2.6,5.5",
+    "sentence_pauses": 0.3,
+    "even_chunks": true
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "speak": 0.5,
+    "speak_on": 3
+  },
+  "real_mid_reply_off": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 128,
+    "max_tokens": 8000,
+    "top": 8,
+    "seed": 1
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "g26b4std",
+      "m3b4"
+    ],
+    "carry_on_p": 0.9
+  },
+  "mute_service_greetings": true,
+  "init_from": "gptoss2",
+  "cache": "gptoss2"
+}

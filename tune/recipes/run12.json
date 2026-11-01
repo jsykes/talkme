@@ -1,0 +1,86 @@
+{
+  "_about": "Run 12, the partner (2026-10-21): run 10 exactly (its dialogues, mix and weights; the best timing and safety so far) with one change: 40 of its 120 'no idea' dialogues instead of all of them (they made it hedge on answerable questions). No new dialogues are written. Run 11 changed three things at once and got too quiet; this changes one.",
+  "name": "run12",
+  "base": "hauhau",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-partner-v0-hauhau.gguf",
+  "dialogues": [],
+  "dialogue_files": [
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "no_unknown"
+    },
+    {
+      "file": "out/dial_run10.jsonl",
+      "per": 2,
+      "filter": "only_unknown",
+      "limit": 40
+    },
+    {
+      "file": "out/dial_partner2.jsonl",
+      "per": 2
+    },
+    {
+      "file": "out/dial_partner.jsonl",
+      "per": 1,
+      "filter": "no_shared_life"
+    }
+  ],
+  "build": {
+    "per": 2,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5"
+  },
+  "mix": [
+    {
+      "file": "out/calls_oto_all.jsonl",
+      "take": 250
+    },
+    {
+      "file": "out/calls_built_r5_nodecline.jsonl",
+      "take": 300,
+      "filter": "hazard_only"
+    },
+    {
+      "file": "out/calls_train_masked_nodecline.jsonl",
+      "take": 100,
+      "filter": "hazard_only"
+    },
+    "out/calls_special_r8_nodecline.jsonl"
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9
+  },
+  "real_mid_reply_off": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 600,
+    "batch": 4,
+    "lr": 0.0002,
+    "chunk": 160,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "run9",
+      "run10",
+      "run11"
+    ]
+  }
+}

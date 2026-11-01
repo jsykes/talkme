@@ -1,0 +1,3 @@
+{
+  "notes": "g26: the first Gemma partner, run 12's recipe moved unchanged onto Gemma 4 26B-A4B. Kept as a reference.\nLive 86%, but pushy: stops when cut in on 2/9, talks over 18% on the held-out set, and its median reply started 0.5 s before the caller finished. Few fillers (13%)."
+}

@@ -1,0 +1,3 @@
+{
+  "notes": "v1's recipe trained on the standard Gemma (g26b4std). Runs at 0.7.\nLive 85%, declines 12/12 where v1 gets 6/12, hears short questions again. Quiz 10/12.\nHeld-out: start 85%, barge 94%, talks over 7%. Trade-offs against v1: it waits more after its own sentences, and replies 1.19 s after the caller, slower than v1."
+}

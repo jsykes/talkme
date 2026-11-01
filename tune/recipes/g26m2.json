@@ -1,0 +1,64 @@
+{
+  "_about": "Persona and memories, second try (2026-10-23), as a short second stage on top of g26 instead of a run from zero. g26m (persona calls mixed into a full run) learned the memory part (false memories: played along 6 of 16, g26 14 of 16) but lost the rest: much quieter, late, 8/12 on the quiz and 2/12 with a persona prompt, where it dodged questions with persona chatter. Changes: starts from g26's adapter and trains 150 steps at half the learning rate; the new persona calls (170, each once) are mixed with 400 of g26's own training calls so it keeps its timing; the writer now gives every false-memory claim its own scenario (half of g26m's were 'remember Vegas'), writes ordinary people instead of gimmicks, and has every call answer at least one question directly.",
+  "name": "g26m2",
+  "base": "gemma4a4b",
+  "init_from": "g26",
+  "writer": "original",
+  "prompt": "partner",
+  "export_as": "talkme-g26m2-partner-gemma4a4b.gguf",
+  "dialogues": [
+    {"kind": "memory", "focus": "recall", "count": 60, "seed": 6201, "start_id": 330000, "goodbye": 0.3},
+    {"kind": "memory", "focus": "false_memory", "count": 70, "seed": 6202, "start_id": 340000, "goodbye": 0.3},
+    {"kind": "memory", "focus": "blank", "count": 40, "seed": 6203, "start_id": 350000, "goodbye": 0.3}
+  ],
+  "dialogue_files": [],
+  "build": {
+    "per": 1,
+    "timing": "mixed",
+    "max_ticks": 460,
+    "fillers": "Mm-hm.|Yeah.|Right.|Uh-huh.|Oh yeah?|Oh wow.|Totally.|Oh nice.|Huh.|Ha, yeah.|Oh no.|Really?",
+    "filler_min_talk": 3.0,
+    "filler_gap": 5.0,
+    "nudge_quiet": "2.6,5.5",
+    "greetings": "partner"
+  },
+  "mix": [
+    {
+      "file": "out/calls_g26.jsonl",
+      "take": 400
+    }
+  ],
+  "weights": {
+    "continuer": 2.05,
+    "hazard_start": 5.0,
+    "hazard": 2.2,
+    "barge_stop": 4.5,
+    "listen_done": 1.9,
+    "false_memory_start": 6.0,
+    "false_memory": 2.2
+  },
+  "real_mid_reply_off": true,
+  "mute_service_greetings": true,
+  "train": {
+    "rank": 32,
+    "alpha": 64,
+    "steps": 150,
+    "batch": 4,
+    "lr": 0.0001,
+    "chunk": 128,
+    "max_tokens": 8000
+  },
+  "tests": {
+    "quiz": true,
+    "yap": 24,
+    "ours": true,
+    "memory": true,
+    "live": true,
+    "listen_p": 0.6,
+    "compare": [
+      "run12",
+      "g26",
+      "g26m"
+    ]
+  }
+}

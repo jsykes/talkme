@@ -1,0 +1,3 @@
+{
+  "notes": "v1's recipe on Ministral 3 14B (m3b4), a second model family. Trained on an RTX 3080 Ti Laptop.\nVery fast: 0.03-0.04 s a tick against about 0.21 s for the 26B-A4B. Live 84%, maths 5/6, quiz 10/12.\nWeak spots: speaks up after a silence 0/3, quiet nudge 3/6, long talk 3/6, 13% of utterances unfinished."
+}

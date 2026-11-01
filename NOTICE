@@ -1,0 +1,13 @@
+talkme
+Copyright 2026 the talkme contributors
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The adapter format, the first training dataset and the listen-probability rule come from
+codacus/Qwen3.6-35B-A3B-MicroTurn-Duplex-LoRA (Apache 2.0):
+https://huggingface.co/codacus/Qwen3.6-35B-A3B-MicroTurn-Duplex-LoRA
+
+The micro-turn idea comes from DuplexCascade (Yang, Fujita and Sudo, 2026), arXiv:2603.09180.
+
+Data used in training and evaluation is credited in tune/data/ATTRIBUTION.md. The base models and speech models are
+not part of this repository; each is downloaded from its own publisher under its own licence.

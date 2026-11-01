@@ -1,0 +1,3 @@
+{
+  "notes": "The published adapter by codacus (Apache 2.0) that talkme started from. Uses the assistant prompt on the standard Qwen, threshold 0.65. Not ours and not in git."
+}

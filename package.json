@@ -1,0 +1,21 @@
+{
+  "name": "talkme",
+  "version": "1.0.0",
+  "engines": { "node": ">=20" },
+  "description": "Turn a local text LLM into a full-duplex voice chat with 600 ms micro-turns, and tune it.",
+  "main": "src/main/index.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "setup": "node scripts/setup.js",
+    "test:live": "node scripts/audio_test.js",
+    "bench": "bash scripts/live_bench.sh"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "electron": "^44.8.0"
+  },
+  "dependencies": {
+    "sherpa-onnx-node": "^1.13.8"
+  }
+}
