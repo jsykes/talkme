@@ -51,7 +51,7 @@ Checklist:
 - [ ] Echo canceller in real calls: the echo test hears 0 words; check longer calls on speakers.
 - [x] An adapter browser (2026-10-31): the Adapters tab shows each adapter's metadata, results and notes in one place; notes
       and names live in a JSON card beside the file, and rename and remove keep saved settings and recipes right.
-- [ ] Confirm the chosen adapters over 2-3 training seeds (one run's manners swing as much as recipe changes).
+- [x] Confirm v1 over 3 seeds on recorded and held-out tests (2026-11-01, `docs/RESULTS.md`): one run's manners swing as much as recipe changes, and v1 was a kind draw. Other bases are still one run each.
 - [x] One-command setup and a README for someone new (2026-10-28): `npm run setup` (`scripts/setup.js`) fetches llama.cpp,
   v1's base, the speech models and the aec/ environment; `--orpheus` and `--base` for more.
 - [ ] Linux with NVIDIA (2026-10-28): tested in Docker on the 4090. Fresh clone, `npm install` and `npm run setup`

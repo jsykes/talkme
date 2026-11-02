@@ -279,6 +279,9 @@ took 72 minutes on an RTX 4090. One run of each:
 | Held-out calls: stops when cut in on | 89% | 94% |
 | Held-out calls: back-channels when the person did | 26% | 17% |
 
+Two more seeds of v1's recipe (`docs/RESULTS.md`) talked over the caller 1.4 and 1.5 times a minute, so that gap holds.
+The quiet and back-channel gaps do not: those seeds scored 68% and 89% on quiet, and 14% and 15% on back-channels.
+
 To add the real conversations, ask for access to
 [otoSpeech](https://huggingface.co/datasets/otoearth/otoSpeech-full-duplex-processed-141h) (a short form, CC BY 4.0), set
 `HF_TOKEN`, and download it (19 GB):

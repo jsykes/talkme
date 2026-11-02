@@ -1028,7 +1028,7 @@ recipe), not to swap the base under v1.
 **How this training differs from the author's Qwen adapter** (codacus MicroTurn Duplex): theirs is rank 32 on Qwen3.6
 35B-A3B's last 4 layers (36-39), 282 steps over 564 LLM-written calls in the assistant role, run at threshold 0.3,
 against the UD-Q4_K_M weights. Ours keeps the rank and the last-4-layers shape (Gemma's 27-30), but trains on built
-calls plus real recorded conversations (Open Yap, otoSpeech) with per-tag loss weights (beats, cut-in stops,
+calls plus real recorded conversations (otoSpeech; Open Yap is held out for testing) with per-tag loss weights (beats, cut-in stops,
 carry-on), on a partner system prompt, cached hidden states (Phase A) so each base needs its own cache, and runs at
 0.6 with the carry-on bar.
 
@@ -1151,3 +1151,37 @@ on a curly apostrophe the check did not accept.
 
 gptoss15 is **Partner v1 (gpt-oss)** (`talkme-partner-v1-gptoss.gguf`), picked by ear over gptoss13 on manual calls,
 at a threshold of 0.6. The family is proven and working. gptoss15 itself has had only the quizzes, 9/12 and the wide one.
+
+## Three seeds of v1's recipe (2026-11-01)
+
+`g26b4s1` and `g26b4s2` retrain g26b4 with seeds 1 and 2: same calls, same cache, tested as v1 is, at 0.6 with the carry-on
+bar. g26b4 is seed 0, and it was the recipe's first run. No live bench on the new two.
+
+| | v1 (seed 0) | g26b4s1 | g26b4s2 |
+|---|---|---|---|
+| Quiz | 9/12 | 10/12 | 11/12 |
+| Recorded: utterances a minute (person 7.4) | 4.0 | 5.0 | 7.2 |
+| Recorded: takes the turn within a tick | 35% | 35% | 42% |
+| Recorded: within about 2.4 s | 57% | 61% | 73% |
+| Recorded: talks over the caller, a minute | 0.9 | 1.4 | 1.5 |
+| Recorded: quiet when the person gave way to a cut-in | 17/19 | 13/19 | 17/19 |
+| Recorded: back-channels a minute (person 0.8) | 0.8 | 0.3 | 0.4 |
+| Recorded: stalls | 4 | 3 | 2 |
+| Held-out: start / hazard / barge | 83 / 54 / 89% | 76 / 46 / 94% | 77 / 58 / 97% |
+| Held-out: filler / talks over / unfinished | 27 / 9 / 1% | 14 / 8 / 1% | 15 / 9 / 0% |
+
+The bar holds on every seed. The rest of v1 is one draw, and a kind one on manners: lowest talk-over, most back-channels,
+about twice the others' back-channels in place. Pace, which held steady across g26's seeds, went from 4.0 to 7.2 here.
+Some of that lead is probably selection, since this recipe was picked partly on these scores.
+
+Earlier conclusions that change:
+
+- **The beats "halved" talk-over:** g26 1.8 against g26b4 1.0 were each near the edge of their own seeds. The direction
+  looks right, the size is not established.
+- **Without otoSpeech:** 2.1 talk-overs a minute, 49% within a tick and 65% of warnings are still outside these ranges
+  (one run against three). Its 74% quiet on cut-ins and 17% back-channels in place are inside them, so those two are not
+  evidence for the real calls.
+- **g26b5's trained alternative to the bar:** its 14/19 quiet on cut-ins against v1's 17 is inside the 13-17 here.
+
+g26b4s2 is the closest to a person's pace and turn-taking of any v1-recipe run, with few back-channels and no live tests.
+v1 stays the default; if a later recipe is compared with v1, compare it with this range and not with v1's numbers.
